@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
+using Newtonsoft.Json;
+using System.IO;
 
 namespace creating_column_chart_from_a_list
 {
@@ -199,6 +201,32 @@ namespace creating_column_chart_from_a_list
             series.ChartType = SeriesChartType.Bubble;
 
             foreach (var temp in temperatureData)
+            {
+                series.Points.AddXY(temp.Key, temp.Value);
+            }
+
+            chart1.Series.Add(series);
+
+            chart1.ChartAreas[0].AxisX.Title = "Year";
+            chart1.ChartAreas[0].AxisY.Title = "Temperature in degrees C";
+        }
+
+        static List<KeyValuePair<string, double>> define_json()
+        {
+            string jsonFilePath = "data.json";
+            List<KeyValuePair<string, double>> tempData = JsonConvert.DeserializeObject<List<KeyValuePair<string, double>>>(jsonFilePath);
+            return tempData;
+        }
+
+        private void button10_Click(object sender, EventArgs e)
+        {
+            chart1.Series.Clear();
+            List <KeyValuePair<string, double>> tempData = define_json();
+
+            Series series = define_series();
+            series.ChartType = SeriesChartType.Column;
+
+            foreach (var temp in tempData)
             {
                 series.Points.AddXY(temp.Key, temp.Value);
             }
