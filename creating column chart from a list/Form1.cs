@@ -214,8 +214,40 @@ namespace creating_column_chart_from_a_list
         static List<KeyValuePair<string, double>> define_json()
         {
             string jsonFilePath = "data.json";
-            List<KeyValuePair<string, double>> tempData = JsonConvert.DeserializeObject<List<KeyValuePair<string, double>>>(jsonFilePath);
+            List<KeyValuePair<string, double>> tempData = ReadJsonFile(jsonFilePath);
             return tempData;
+        }
+
+        static List<KeyValuePair<string, double>> ReadJsonFile(string filePath)
+        {
+            try
+            {
+                // Read the JSON file
+                string jsonData = File.ReadAllText(filePath);
+
+                // Deserialize JSON data to a list of KeyValuePair
+                List<KeyValuePair<string, double>> dataPoints = JsonConvert.DeserializeObject<List<KeyValuePair<string, double>>>(jsonData);
+
+                return dataPoints;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error reading JSON file: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return new List<KeyValuePair<string, double>>();
+            }
+        }
+
+        static void add_value(Series series,List<KeyValuePair<string, double>> tempData)//
+        {
+            foreach (var temp in tempData)
+            {
+                series.Points.AddXY(temp.Key, temp.Value);
+            }
+
+            chart1.Series.Add(series);
+
+            chart1.ChartAreas[0].AxisX.Title = "Year";
+            chart1.ChartAreas[0].AxisY.Title = "Temperature in degrees C";
         }
 
         private void button10_Click(object sender, EventArgs e)
