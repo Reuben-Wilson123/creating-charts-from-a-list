@@ -189,5 +189,24 @@ namespace creating_column_chart_from_a_list
             chart1.ChartAreas[0].AxisX.Title = "Year";
             chart1.ChartAreas[0].AxisY.Title = "Temperature in degrees C";
         }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            chart1.Series.Clear();
+            List<KeyValuePair<string, double>> temperatureData = define_list();
+
+            Series series = define_series();
+            series.ChartType = SeriesChartType.Bubble;
+
+            foreach (var temp in temperatureData)
+            {
+                series.Points.AddXY(temp.Key, temp.Value);
+            }
+
+            chart1.Series.Add(series);
+
+            chart1.ChartAreas[0].AxisX.Title = "Year";
+            chart1.ChartAreas[0].AxisY.Title = "Temperature in degrees C";
+        }
     }
 }
